@@ -1,0 +1,59 @@
+{extend name="base" /}
+{block name="css"}
+
+{/block}
+
+{block name="title"}{$zjname}{/block}
+
+{block name="tab"}
+
+{/block}
+
+{block name="container"}
+<div class="mdui-container">
+    <div class="mdui-row">
+        <div class="mdui-col-xs-8 mdui-col-offset-xs-2">
+            <div style="height: 50px;"></div>
+            <div class="mdui-col-xs-4">
+                <img class="mdui-img-circle" style="width: 200px;height: 200px;" src="{$imgurl}"/>
+            </div>
+            <div class="mdui-col-xs-8" style="margin-top: 20px">
+                <span class="mdui-typo-title">专辑名：</span>{$zjname}<br><br>
+                <span class="mdui-typo-title">歌手：</span><a href="{:url('index/detil/singerdetil',['gsname'=>$gsname])}">{$gsname}</a><br><br>
+                <span class="mdui-typo-title">发行时间：</span>{$createtime}
+            </div>
+            <div class="mdui-col-xs-12" style="margin-top: 20px">
+                <div class="mdui-typo-title">专辑介绍:</div>
+                <br>
+                <div class="mdui-typo">{$summary}</div>
+            </div>
+            <div class="mdui-col-xs-12">
+                <div class="mdui-tab mdui-tab-full-width" mdui-tab>
+                    <a href="#songs" class="mdui-ripple">包含歌曲</a>
+                </div>
+                <div id="songs" class="mdui-p-a-2">
+                    <div class="mdui-table-fluid">
+                        <table class="mdui-table mdui-table-hoverable">
+                            <thead>
+                            <tbody>
+                            {volist name="songs" id="gq"}
+                            <tr>
+                                <td>{$i}</td>
+                                <td><a href="{:url('index/detil/songdetil',['gqid'=>$gq.gqid])}">{$gq.gqname}</a></td>
+                                <td><a href="{:url('index/detil/classdetil',['classid'=>$gq.classid])}">{$gq.classname}</a></td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+
+{/block}

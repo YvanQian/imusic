@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="/static/css/global.css" media="all">
+	<link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/static/css/table.css" />
+</head>
+<body>
+<div class="admin-main">
+	<blockquote class="layui-elem-quote">
+		<a href="javascript:;" class="layui-btn layui-btn-small" id="add">
+			<i class="layui-icon">&#xe608;</i> 添加歌曲
+		</a>
+		<a href="#" class="layui-btn layui-btn-small" id="getSelected">
+			<i class="layui-icon">&#xe640;</i> 删除选中歌曲
+		</a>
+	</blockquote>
+	<fieldset class="layui-elem-field">
+		<legend>歌曲列表</legend>
+		<div class="layui-field-box layui-form">
+			<table class="layui-table admin-table">
+				<thead>
+				<tr>
+					<th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+					<th>歌曲名称</th>
+					<th>所属专辑</th>
+					<th>歌手</th>
+					<th>分类</th>
+					<th>歌曲</th>
+					<th>MV</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				<tbody id="content">
+				{volist name="lists" id="vo"}
+				<tr>
+					<td><input type="checkbox" lay-skin="primary"></td>
+					<td>{$vo.gqname}</td>
+					<td>{$vo.zjname}</td>
+					<td>{$vo.gsname}</td>
+					<td>{$vo.classname}</td>
+					{eq name="$vo.gqurl" value=""}
+					<td>请上传</td>
+					{else/}
+					<td width="300px">
+						<audio controls="controls">
+						<source src="{$vo.gqurl}" type="audio/mpeg">
+						</audio>
+					</td>
+					{/eq}
+					{eq name="$vo.mvurl" value=""}
+					<td>请上传</td>
+					{else/}
+					<td><a href="javascript:;" data-mvurl="{$vo.mvurl}" data-name="{$vo.gqname}" data-opt="mv"><i class="layui-icon" style="font-size: 30px;color: #FF5722;">&#xe6ed;</i></a></td>
+					{/eq}
+					<td>
+						<a href="javascript:;" data-name="{$vo.gqname}" data-id="{$vo.id}" data-opt="edit" class="layui-btn layui-btn-mini">编辑</a>
+						<a href="javascript:;" data-name="{$vo.gqname}" data-id="{$vo.id}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+					</td>
+				</tr>
+				{/volist}
+				</tbody>
+			</table>
+		</div>
+	</fieldset>
+	<div class="admin-table-page">
+		<div id="paged" class="pagelist">
+			{$lists->render()}
+		</div>
+	</div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery-1.11.3/jquery.js"></script>
+<script src="/static/js/operate/songoperate.js"></script>
+
+</body>
+</html>

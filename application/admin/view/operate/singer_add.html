@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style type="text/css">
+        img:hover{ transform:scale(5); z-index: 092113114;}
+    </style>
+</head>
+<body>
+<div style="margin: 15px;">
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="gsname" required lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">歌手介绍</label>
+            <div class="layui-input-block">
+                <textarea class="layui-textarea" id="summary" style="display: none"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">生日</label>
+            <div class="layui-input-inline">
+                <input type="text" name="birthday" id="date" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上传图片</label>
+            <div class="layui-input-inline">
+                <input type="file" name="image" class="layui-upload-file"/>
+                <input type="hidden" name="imgurl" id="imgurl">
+                <img id="img" name="img" src="">
+            </div>
+        </div>
+        <!--<div class="layui-form-item">-->
+            <!--<label class="layui-form-label">上传图片</label>-->
+            <!--<div class="layui-input-block">-->
+                <!--<div class="face-img">-->
+                    <!--<img id="upload" src="">-->
+                    <!--<div class="site-demo-upload">-->
+                        <!--<input type="file" name="image" class="layui-upload-file">-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <br>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="save" id="save">保存</button>
+                <button class="layui-btn layui-btn-primary" id="cancel">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery-1.11.3/jquery.js"></script>
+
+<script>
+    layui.use(['form','upload','layer','laydate','layedit'],function () {
+        var form = layui.form(),
+            layer = layui.layer,
+            laydate = layui.date,
+            layedit = layui.layedit,
+            index = parent.layer.getFrameIndex(window.name);
+
+        layui.upload({
+            url: 'singerimg',
+            success: function (res) {
+                console.log(res);
+                $("#img").attr({src:res.url,width:"60",heigth:"60"});
+                $("#imgurl").val(res.url);
+            }
+        });
+
+        var summary =  layedit.build('summary', {
+            tool: ['left', 'center', 'right', 'strong']
+            ,height: 100
+        })
+
+        form.on('submit(save)',function (data) {
+            var datas = data.field
+            console.log(datas)
+            console.log(layedit.getContent(summary))
+            $.ajax({
+                type: 'post',
+                url: 'addsinger',
+                data: {'gsname':datas.gsname,'summary':layedit.getContent(summary),'birthday':datas.birthday,'imgurl':datas.imgurl},
+                dataType: 'json',
+                success: function (result) {
+                    if(result.status == 0 ){
+                        layer.msg('歌手已存在',function(){})
+                    }else if(result.status == 1){
+                        layer.alert('添加成功',{
+                            btn:['继续添加','返回']
+                        },function () {
+                            location.reload()
+                        },function () {
+                            parent.layer.close(index);
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg('添加失败');
+                    }
+                }
+            });
+        });
+
+        $("#cancel").click(function () {
+            parent.layer.close(index);
+            parent.location.reload();
+        });
+    });
+</script>
+</body>
+</html>

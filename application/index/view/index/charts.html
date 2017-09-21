@@ -1,0 +1,54 @@
+{extend name="base" /}
+{block name="css"}
+
+{/block}
+
+{block name="title"}排行榜{/block}
+
+{block name="tab"}
+<div class="mdui-tab mdui-color-theme mdui-tab-centered" mdui-tab>
+    <a href="{:url('recommend')}" class="mdui-ripple">推荐</a>
+    <a href="{:url('charts')}" class="mdui-ripple mdui-tab-active">排行榜</a>
+    <a href="{:url('singer')}" class="mdui-ripple">歌手</a>
+    <a href="{:url('albums')}" class="mdui-ripple">专辑</a>
+</div>
+{/block}
+
+{block name="container"}
+
+<div class="mdui-container">
+    <div class="mdui-row">
+        <div class="mdui-col-xs-8 mdui-col-offset-xs-2">
+            <div class="mdui-typo-title" style="margin:10px 0 10px">
+                <i class="mdui-icon material-icons" style="margin-bottom:4px">&#xe3a1;</i>
+                歌曲列表<span style="margin-left: 10px;font-size: 10px;color: #4C5360">{$count}首歌</span>
+            </div>
+            <div class="mdui-divider-dark mdui-color-red"></div>
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>标题</th>
+                        <th>歌手</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name="songs" id="gq"}
+                    <tr>
+                        <td>{$i}</td>
+                        <td><a href="{:url('index/detil/songdetil',['gqid'=>$gq.gqid])}">{$gq.gqname}</a></td>
+                        <td><a href="{:url('index/detil/singerdetil',['gsname'=>$gq.gsname])}">{$gq.gsname}</a></td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+
+{/block}

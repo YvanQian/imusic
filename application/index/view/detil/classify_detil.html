@@ -1,0 +1,62 @@
+{extend name="base" /}
+{block name="css"}
+
+{/block}
+
+{block name="title"}{/block}
+
+{block name="tab"}
+
+{/block}
+
+{block name="container"}
+<div class="mdui-container">
+    <div class="mdui-row">
+        <div class="mdui-col-xs-8 mdui-col-offset-xs-2">
+            <div class="mdui-typo-title" style="margin-top: 50px">
+                {empty name="classname"}
+                全部分类
+                {else/}
+                {$classname}
+                {/empty}
+                <button class="mdui-btn mdui-btn-raised mdui-btn-dense" mdui-menu="{target: '#demo-attr-cascade'}">选择分类</button>
+                <ul class="mdui-menu mdui-menu-cascade" id="demo-attr-cascade">
+                    <li class="mdui-menu-item">
+                        <a href="{:url('index/detil/classdetil')}" class="mdui-ripple ">
+                            全部分类
+                        </a>
+                    </li>
+                    <li class="mdui-divider"></li>
+                    <li class="mdui-menu-item">
+                        {volist name="classify" id="fl"}
+                    <li class="mdui-menu-item">
+                        <a href="{:url('index/detil/classdetil',['classid'=>$fl.classid])}" class="mdui-ripple">{$fl.classname}</a>
+                    </li>
+                    {/volist}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mdui-divider-dark mdui-color-red"  style="margin-top: 20px"></div>
+            {volist name="song" id="gq"}
+            <div class="mdui-col-xs-3" style="margin:20px 0">
+                <div class="mdui-col">
+                    <div class="mdui-grid-tile">
+                        <a href="{:url('index/detil/songdetil',['gqid'=>$gq.gqid])}"><img src="{$gq.imgurl}"/></a>
+                        <div class="mdui-grid-tile-actions">
+                            <div class="mdui-grid-tile-text">
+                                <div class="mdui-grid-tile-title">{$gq.gqname}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/volist}
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+
+{/block}

@@ -1,0 +1,19 @@
+  {volist name="list" id="vo"}
+	<tr>
+		<td><input type="checkbox" lay-skin="primary"></td>
+		<td>{$vo.uid}</td>
+		<td>{$vo.name}</td>
+		<td>{$vo.sex}</td>
+		<td>{$vo.email}</td>
+		<td>{$vo.regdate}</td>
+		<td>
+			<a href="javascript:;" data-name="{$vo.name}" data-id="{$vo.id}" data-opt="edit" class="layui-btn layui-btn-mini">编辑</a>
+			<a href="javascript:;" data-name="{$vo.name}" data-id="{$vo.id}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+		</td>
+	</tr>
+	{/volist}
+    <tr>
+		<td class="pagelist" colspan="7">
+			{$list->render()}
+	    </td>
+	</tr>

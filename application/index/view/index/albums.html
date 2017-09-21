@@ -1,0 +1,47 @@
+{extend name="base" /}
+{block name="css"}
+
+{/block}
+
+{block name="title"}专辑{/block}
+
+{block name="tab"}
+<div class="mdui-tab mdui-color-theme mdui-tab-centered" mdui-tab>
+    <a href="{:url('recommend')}" class="mdui-ripple">推荐</a>
+    <a href="{:url('charts')}" class="mdui-ripple">排行榜</a>
+    <a href="{:url('singer')}" class="mdui-ripple">歌手</a>
+    <a href="{:url('albums')}" class="mdui-ripple mdui-tab-active">专辑</a>
+</div>
+{/block}
+
+{block name="container"}
+<div class="mdui-container">
+    <div class="mdui-row">
+        <div class="mdui-col-xs-8 mdui-col-offset-xs-2">
+            <div class="mdui-typo-title" style="margin:20px 0 10px">
+                <i class="mdui-icon material-icons" style="margin-bottom:4px">&#xe3a1;</i>
+                专辑列表
+            </div>
+            <div class="mdui-divider-dark mdui-color-red"></div>
+            {volist name="albums" id="zj"}
+                <div class="mdui-col-xs-4" style="margin:20px 0">
+                    <div class="mdui-col">
+                        <div class="mdui-grid-tile">
+                            <a href="{:url('index/detil/albumdetil',['zjid'=>$zj.zjid])}"><img src="{$zj.imgurl}"/></a>
+                            <div class="mdui-grid-tile-actions">
+                                <div class="mdui-grid-tile-text">
+                                    <div class="mdui-grid-tile-title">{$zj.zjname}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {/volist}
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+
+{/block}

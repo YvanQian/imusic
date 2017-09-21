@@ -1,0 +1,155 @@
+{extend name="base" /}
+{block name="css"}
+<link href="/static/css/music.css" rel="stylesheet">
+<style type="text/css">
+    .pagination {text-align: center;}
+    .pagination li {display: inline-block;margin-right: -1px;padding: 5px;border: 1px solid #e2e2e2;min-width: 20px;text-align: center;}
+    .pagination li.active {background: #01AAED;color: #fff;border: 1px solid #01AAED;}
+    .pagination li a {display: block;text-align: center;}
+</style>
+{/block}
+
+{block name="title"}{/block}
+
+{block name="tab"}
+
+{/block}
+
+{block name="container"}
+<div class="mdui-container">
+    <div class="mdui-row" align="center">
+        <div class="mdui-col-xs-8 mdui-col-offset-xs-2">
+
+
+            <div class="fm" style="margin-top: 60px;">
+                <div class="mdui-col-offset-sm-2 mdui-col-offset-md-3 mdui-col-xs-12 mdui-col-sm-8 mdui-col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body text-center">
+                            <div class="singlecover">
+                                <img src="{$imgurl}" class="mdui-img-circle" id="image">
+                            </div>
+                            <div class="mdui-typo">
+                                <h4>{$gqname}</h4>
+                                <h5>《{$zjname}》</h5>
+                                <span>{$gsname}</span>
+                            </div>
+                            {notempty name="$mvurl"}
+                            <a href="javascript:void(0)" alt="观看mv" data-mvurl="{$mvurl}" data-name="{$gqname}" id="mv"><i class="layui-icon" style="font-size: 30px;color: #FF5722;">&#xe6ed;</i></a>
+                            {/notempty}
+                            <input type="hidden" id="gqurl" value="{$gqurl}">
+
+                            <div id="player"></div>
+                                <div style="margin-top:40px; margin-bottom: 30px;">
+                                    <a href="{$gqurl}" download="{$gqname}"><i class="fa fa-2x fa-download" title="下载" style="margin-right:20px;"></i></a>
+                                    <a href="javascript:void(0)"><i class="fa fa-2x fa-play jp-play" title="播放"></i></a>
+                                    <a href="javascript:void(0)"><i class="fa fa-2x fa-pause jp-pause" title="暂停"></i></a>
+                                    <a href="javascript:void(0)"><i class="fa fa-2x fa-stop jp-stop" title="停止" style="margin-left:20px;"></i></a>
+                                    <!--<audio id="play" autoplay="autoplay" src="{$gqurl}" controls="controls" loop="loop"></audio>-->
+                                </div>
+
+                                <div class="m-seek-bar jp-seek-bar" style="width: 100%; margin-bottom: 20px;text-align: left">
+                                    <div class="m-play-bar jp-play-bar" style="width:0; overflow: hidden;"></div>
+                                </div>
+
+                                <div style="margin-bottom: 20px;">
+                                    <span class="jp-current-time">00:00</span> / <span class="jp-duration">00:00</span>
+                                </div>
+
+                            <div class="layui-form" style="text-align: left;">
+                                <textarea id="content" style="display: none;"></textarea>
+                                <input type="hidden" name="uname" value="{$Think.session.ext_user['uname']}">
+                                <button id="save" lay-submit lay-filter="save" class="layui-btn layui-btn-small layui-btn-normal" style="float: right">评论</button>
+                                <div style="clear: both"></div>
+                            </div>
+                            <div id="comment" style="text-align: left;">
+                                {include file="/detil/comment" /}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script src="/static/jplayer/jquery.jplayer.min.js"></script>
+<script>
+        $("#player").jPlayer({
+            ready: function () {
+                $(this).jPlayer("setMedia",{
+                    mp3: $('#gqurl').val()
+                }).jPlayer("play")
+            },
+            swfPath: "static/jplayer",
+            supplied: "mp3",
+            cssSelectorAncestor: ".fm"
+        });
+
+    function ajax_page(page) {
+        $.ajax({
+            type:"POST",
+            data:'&page='+page,
+            success: function(data,status){
+                $("#comment").html(data);
+            }
+        });
+    }
+    layui.use(['layer','form','layedit'], function() {
+        var layer = layui.layer,
+            form = layui.form(),
+            layedit = layui.layedit;
+
+        var content =  layedit.build('content', {
+            tool: ['face','|','left', 'center', 'right']
+            ,height: 100
+        })
+
+        form.on('submit(save)',function (data) {
+            var datas = data.field;
+            var contents = layedit.getContent(content);
+            if(datas.uname){
+                if(contents){
+                    var url = "{:url('index/detil/songdetil',['gqid'=>$gqid])}";
+                    var data = {'content':contents,'uname':datas.uname};
+                    $.ajax({
+                        type: 'get',
+                        async: false,
+                        url: url,
+                        data: data,
+                        success:function (data) {
+                            layer.msg('评论成功');
+                            $("#comment").html(data);
+                        }
+                    }) 
+                }else{
+                    layer.alert('请先填写评论内容！')
+                }
+            }else{
+                layer.alert('请先登录！')
+            }
+        })
+       
+        $("#mv").on('click',function () {
+            $("#player").jPlayer("pause");
+            var mvurl = $("#mv").data('mvurl');
+            var gqname = $("#mv").data('name');
+            layer.open({
+                title: gqname,
+                type: 2,
+                maxmin: true,
+                content: "{:url('index/detil/vedio')}",
+                area: ['800px', '500px'],
+                success: function (layero,index) {
+                    var body = layer.getChildFrame('body',index);
+                    body.find('video').attr('src',mvurl);
+                },
+                end: function(){
+                    $("#player").jPlayer("play");
+                }
+            })
+        })
+    }) 
+</script>
+{/block}

@@ -1,0 +1,48 @@
+{extend name="base" /}
+{block name="css"}
+<style type="text/css">
+    .pagination {text-align: center;}
+    .pagination li {display: inline-block;margin-right: -1px;padding: 5px;border: 1px solid #e2e2e2;min-width: 20px;text-align: center;}
+    .pagination li.active {background: #01AAED;color: #fff;border: 1px solid #01AAED;}
+    .pagination li a {display: block;text-align: center;}
+</style>
+{/block}
+{block name="title"}搜索结果{/block}
+{block name="tab"} {/block}
+
+{block name="container"}
+<div class="mdui-container">
+    <div class="mdui-row">
+        <div class="mdui-col-xs-8 mdui-col-offset-xs-2">
+            <form style="width: 50%;padding: 20px;" class="layui-form layui-form-pane" action="{:url('index/detil/search')}" method="get">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input type="text" name="keyword" value="{$keyword}" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn" style="background-color: #393D49"><i class="layui-icon">&#xe615;</i></button>
+                </div>
+            </form>
+
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable">
+                        <tbody id="songs">
+                        {volist name="songs" id="gq"}
+                        <tr>
+                            <td>{$i}</td>
+                            <td><a href="{:url('index/detil/songdetil',['gqid'=>$gq.gqid])}">{$gq.gqname}</a></td>
+                            <td><a href="{:url('index/detil/singerdetil',['gsname'=>$gq.gsname])}">{$gq.gsname}</a></td>
+                            <td><a href="{:url('index/detil/albumdetil',['zjid'=>$gq.zjid])}">《{$gq.zjname}》</a></td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 10px">{$songs->render()}</div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+{/block}

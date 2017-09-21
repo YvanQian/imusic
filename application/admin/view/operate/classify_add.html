@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<body>
+<div style="margin: 15px;">
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入分类名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="save" id="save">保存</button>
+                <button class="layui-btn layui-btn-primary" id="cancel">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery-1.11.3/jquery.js"></script>
+
+<script>
+    layui.use(['form','layer'],function () {
+        var form = layui.form(),
+            layer = layui.layer,
+            index = parent.layer.getFrameIndex(window.name);
+
+        form.on('submit(save)',function (data) {
+            var datas = data.field
+            $.ajax({
+                type: 'post',
+                url: 'classify_add',
+                data: {'name':datas.name},
+                dataType: 'json',
+                success: function (result) {
+                    if(result.status == 0 ){
+                        layer.msg('该分类已存在',function(){})
+                    }else if(result.status == 1){
+                        layer.alert('添加成功',{
+                            btn:['继续添加','返回']
+                        },function () {
+                            location.reload()
+                        },function () {
+                            parent.layer.close(index);
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg('添加失败');
+                    }
+                }
+            });
+        });
+//			layer.alert(datas.name,{
+//			    title:'最终提交信息'
+//			})
+//			return false;
+
+        $("#cancel").click(function () {
+            parent.layer.close(index);
+            parent.location.reload();
+        });
+    });
+</script>
+</body>
+</html>

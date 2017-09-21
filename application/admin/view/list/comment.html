@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="/static/css/global.css" media="all">
+	<link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/static/css/table.css" />
+</head>
+<body>
+<div class="admin-main">
+	<blockquote class="layui-elem-quote">
+		<a href="#" class="layui-btn layui-btn-small" id="getSelected">
+			<i class="layui-icon">&#xe640;</i> 删除选中评论
+		</a>
+	</blockquote>
+	<fieldset class="layui-elem-field">
+		<legend>评论列表</legend>
+		<div class="layui-field-box layui-form">
+			<table class="layui-table admin-table">
+				<thead>
+				<tr>
+					<th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+					<th>用户名</th>
+					<th style="width: 100px">评论内容</th>
+					<th>评论歌曲</th>
+					<th>评论时间</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				<tbody id="content">
+				{volist name="lists" id="vo"}
+				<tr>
+					<td><input type="checkbox" lay-skin="primary"></td>
+					<td>{$vo.uname}</td>
+					<td><div class="layui-elip" style="width:200px;">{$vo.content}</div></td>
+					<td>{$vo.gqname}</td>
+					<td>{$vo.commenttime}</td>
+					<td>
+						<a href="javascript:;" data-id="{$vo.id}" data-opt="detil" class="layui-btn layui-btn-mini">查看详细</a>
+						<a href="javascript:;" data-name="{$vo.uname}" data-id="{$vo.id}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+					</td>
+				</tr>
+				{/volist}
+				</tbody>
+			</table>
+		</div>
+	</fieldset>
+	<div class="admin-table-page">
+		<div id="paged" class="pagelist">
+			{$lists->render()}
+		</div>
+	</div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery-1.11.3/jquery.js"></script>
+<script src="/static/js/operate/commentoperate.js"></script>
+
+</body>
+</html>

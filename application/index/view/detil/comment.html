@@ -1,0 +1,12 @@
+
+{volist name="comment" id="vo"}
+    <div style="background: rgba(255,255,255,0.3);padding: 15px 15px 12px 32px;border-radius: 5px;box-shadow: 0 1px 2px rgba(0,0,0,.15), 0 1px 0 rgba(255,255,255,.75) inset">
+        <div class="mdui-typo-title">
+            <i class="mdui-icon material-icons">&#xe851;</i>{$vo.uname}
+        </div>
+        <div class="mdui-typo" style=" padding:10px;word-wrap: break-word;">{$vo.content}</div>
+        <div class="mdui-typo-caption">{$vo.commenttime}</div>
+    </div>
+{/volist}
+<div style="margin-top: 10px">{$page}</div>
+

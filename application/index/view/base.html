@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IMUSIC</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/mdui/css/mdui.css" media="all">
+    <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="/static/css/global.css" media="all">
+    {block name="css"}{/block}
+</head>
+<body >
+<div class="mdui-appbar ">
+    <div class="mdui-toolbar mdui-color-black">
+        <a href="/" class="mdui-typo-headline"><i class="mdui-icon material-icons">&#xe405;</i> iMUSIC</a>
+        <span class="mdui-typo-title"> {block name="title"}{/block}</span>
+        <div class="mdui-toolbar-spacer"></div>
+        <div class="mdui-textfield mdui-textfield-expandable mdui-float-right" style="width: 200px">
+            <form action="{:url('index/detil/search')}" method="get">
+            <button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">&#xe8b6;</i></button>
+            <input class="mdui-textfield-input" name="keyword" type="text" placeholder="输入歌曲名"/>
+            </form>
+        </div>
+        {present name="Think.session.ext_user['uname']"}
+        <button class="mdui-btn mdui-color-theme-accent" mdui-menu="{target: '#demo-attr-cascade'}">
+            <i class="mdui-menu-item-icon mdui-icon material-icons">&#xe853;</i>{$Think.session.ext_user['uname']}
+        </button>
+        <ul class="mdui-menu" id="demo-attr-cascade">
+        <li class="mdui-menu-item">
+            <a href="javascript:;" id="cpwd" class="mdui-ripple">
+            <i class="mdui-menu-item-icon mdui-icon material-icons">&#xe8b8;</i>
+            修改密码
+            </a>
+        </li>
+        <li class="mdui-menu-item">
+            <a href="{:url('index/login/logout')}" class="mdui-ripple">
+            <i class="mdui-menu-item-icon mdui-icon material-icons">&#xe566;</i>
+            注销登录
+            </a>
+        </li>
+        
+        </ul>
+        {else /}
+        <a href="javascript:;" id="login" class="mdui-btn mdui-ripple mdui-ripple-white">登录</a>
+        <a href="javascript:;" id="register" class="mdui-btn mdui-ripple mdui-ripple-white">注册</a>
+        {/present}
+    </div>
+    {block name="tab"}{/block}
+</div>
+{block name="container"}{/block}
+
+<div class="layui-footer" align="center" style="margin: 50px 0;color: grey">
+            <p>2017 &copy;
+                常熟理工学院 092113114 钱毅峰
+            </p>
+</div>
+
+<script src="/static/jquery-1.11.3/jquery.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script src="/static/mdui/js/mdui.js"></script>
+<script>
+    layui.use('layer',function () {
+        var layer = layui.layer;
+
+        $('#login').on('click', function () {
+            layer.open({
+                title: '登录',
+                type: 2,
+                content: "{:url('index/login/login')}",
+                area: ['400px','460px'],
+            })
+        });
+
+        $('#register').on('click', function () {
+            layer.open({
+                title: '注册',
+                type: 2,
+                content: "{:url('index/login/register')}",
+                area: ['400px','680px'],
+            })
+        });
+
+        $('#cpwd').on('click', function() {
+            layer.open({
+                title: false,
+                type: 2,
+                content: "{:url('index/login/changepwd')}",
+                area: ['400px','300px'],
+            });
+        });
+    })
+</script>
+{block name="script"}{/block}
+</body>
+</html>

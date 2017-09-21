@@ -1,0 +1,153 @@
+{extend name="base" /}
+
+{block name="css"}
+<link rel="stylesheet" href="/static/slider/style.min.css">
+<style>
+    ul { list-style-type: none;}
+    .sucaihuo {  height: 450px; margin: 1px auto;}
+</style>
+{/block}
+
+{block name="title"}推荐{/block}
+
+{block name="tab"}
+<div class="mdui-tab mdui-color-theme mdui-tab-centered" mdui-tab>
+    <a href="{:url('recommend')}" class="mdui-ripple mdui-tab-active">推荐</a>
+    <a href="{:url('charts')}" class="mdui-ripple">排行榜</a>
+    <a href="{:url('singer')}" class="mdui-ripple">歌手</a>
+    <a href="{:url('albums')}" class="mdui-ripple">专辑</a>
+</div>
+{/block}
+
+
+{block name="container"}
+<div class="mdui-container">
+    <div class="mdui-row">
+        <div class="mdui-col-xs-8 mdui-col-offset-xs-2">
+            <div class="sucaihuo slider--animated" data-slidizle>
+                <ul data-slidizle-content>
+                    <li style="background-image: url('/static/images/wyt.jpg')"></li>
+                    <li style="background-image: url('/static/images/cqz.jpg')"></li>
+                    <li style="background-image: url('/static/images/xzq.jpg')"></li>
+                    <li style="background-image: url('/static/images/zjl.jpg')"></li>
+                </ul>
+
+                <div data-slidizle-next>
+                    <i class="fa fa-arrow-right"></i>
+                </div>
+                <div data-slidizle-previous>
+                    <i class="fa fa-arrow-left"></i>
+                </div>
+
+                <ul data-slidizle-navigation></ul>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-row">
+        <div class="mdui-col-xs-6 mdui-col-offset-xs-2">
+            <div class="mdui-typo-title" style="margin:10px 0">
+                <i class="mdui-icon material-icons" style="margin-bottom:4px">&#xe80e;</i>
+                热门推荐
+                <span class="layui-breadcrumb" lay-separator="|" style="visibility: visible;margin-left: 10px;">
+                    <a href="{:url('index/detil/classdetil',['classid'=>'FL58fd9b8079fc2'])}">流行<span class="layui-box">|</span></a>
+                    <a href="{:url('index/detil/classdetil',['classid'=>'FL58fd9b857bc90'])}">摇滚<span class="layui-box">|</span></a>
+                    <a href="{:url('index/detil/classdetil',['classid'=>'FL58fd9b8e06c1a'])}">民谣</a>
+                </span>
+                <div style="float:right;"><small><a href="{:url('charts')}">more</a> <i class="mdui-icon material-icons" style="font-size:15px">&#xe163;</i></small></div>
+            </div>
+            <div class="mdui-divider-dark mdui-color-red"></div>
+            {volist name="randsong" id="rgq" length="6"}
+            <div class="mdui-col-xs-4" style="margin:10px 0">
+                <div class="mdui-col">
+                    <div class="mdui-grid-tile">
+                        <a href="{:url('index/detil/songdetil',['gqid'=>$rgq.gqid])}"><img src="{$rgq.imgurl}"/></a>
+                        <div class="mdui-grid-tile-actions">
+                            <div class="mdui-grid-tile-text">
+                                <div class="mdui-grid-tile-title">{$rgq.gqname}</div>
+                                <div class="mdui-grid-tile-subtitle">{$rgq.gsname}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/volist}
+            <div class="mdui-typo-title" style="margin:10px 0">
+                <i class="mdui-icon material-icons" style="margin-bottom:4px">&#xe019;</i>
+                 专辑推荐
+                <div style="float:right;"><small><a href="{:url('albums')}">more</a> <i class="mdui-icon material-icons" style="font-size:15px">&#xe163;</i></small></div>
+            </div>
+            <div class="mdui-divider-dark mdui-color-red"></div>
+            {volist name="albums" id="zj" length="6"}
+            <div class="mdui-col-xs-4" style="margin:20px 0">
+                <div class="mdui-col">
+                    <div class="mdui-grid-tile">
+                        <a href="{:url('index/detil/albumdetil',array('zjid'=>$zj.zjid))}"><img src="{$zj.imgurl}"/></a>
+                        <div class="mdui-grid-tile-actions">
+                            <div class="mdui-grid-tile-text">
+                                <div class="mdui-grid-tile-title">{$zj.zjname}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/volist}
+            <div class="mdui-typo-title" style="margin:20px 0 10px">
+                <i class="mdui-icon material-icons" style="margin-bottom:4px">&#xe3a1;</i>
+                 歌手推荐
+                <div style="float:right;"><small><a href="{:url('singer')}">more</a> <i class="mdui-icon material-icons" style="font-size:15px">&#xe163;</i></small></div>
+            </div>
+            <div class="mdui-divider-dark mdui-color-red"></div>
+            {volist name="singers" id="gs" length="6"}
+            <div class="mdui-col-xs-4" style="margin:20px 0">
+                <div class="mdui-col">
+                    <div class="mdui-grid-tile">
+                        <a href="{:url('index/detil/singerdetil',['gsname'=>$gs.gsname])}"><img src="{$gs.imgurl}"/></a>
+                        <div class="mdui-grid-tile-actions">
+                            <div class="mdui-grid-tile-text">
+                                <div class="mdui-grid-tile-title">{$gs.gsname}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/volist}
+        </div>
+        <div class="mdui-col-xs-2">
+            <div class="mdui-typo-title" style="margin:10px 0 10px">
+                <i class="mdui-icon material-icons" style="margin-bottom:4px">&#xe3a1;</i>
+                 热门歌曲
+                <div style="float:right;"><small><a href="{:url('charts')}">more</a> <i class="mdui-icon material-icons" style="font-size:15px">&#xe163;</i></small></div>
+            </div>
+            <div class="mdui-divider-dark mdui-color-red"></div>
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable">
+                    <tbody>
+                        {volist name="songs" id="gq" length="10"}
+                        <tr>
+                            {if condition="($i == 1) or ($i ==2) or ($i ==3)"}
+                            <td><font style="color:red"><b>{$i}</b></font> <a href="{:url('index/detil/songdetil',['gqid'=>$gq.gqid])}">{$gq.gqname}</a></td>
+                            {else /}
+                            <td>{$i} <a href="{:url('index/detil/songdetil',['gqid'=>$gq.gqid])}">{$gq.gqname}</a></td>
+                            {/if}
+                        </tr>
+                        {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script src="/static/slider/jquery.slidizle.js"></script>
+<script>
+    $(function() {
+        $('.sucaihuo').slidizle({
+            loop: true,
+            autoPlay: true,
+            timeout: 4000
+        });
+    });
+</script>
+{/block}

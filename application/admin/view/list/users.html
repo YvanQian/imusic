@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="/static/css/global.css" media="all">
+	<link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/table.css" />
+</head>
+<body>
+<div class="admin-main">
+	<blockquote class="layui-elem-quote">
+		<a href="javascript:;" class="layui-btn layui-btn-small" id="add">
+			<i class="layui-icon">&#xe608;</i> 添加用户
+		</a>
+        <a href="#" class="layui-btn layui-btn-small" id="getSelected">
+            <i class="layui-icon">&#xe640;</i> 删除选中用户
+        </a>
+		<form action="users" method="get" style="display: inline-block;padding: 0 10px;">
+			<button type="submit" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i> 搜索</button>
+			<!--<a href="javascript:;" class="layui-btn layui-btn-small" id="search">-->
+				<!--<i class="layui-icon">&#xe615;</i> 搜索-->
+			<!--</a>-->
+			<div class="layui-input-inline">
+				<input type="text" value="{$name?$name:'';}" name="name" class="layui-input" placeholder="请输入要搜索的用户" style="margin-left: 10px;height: 30px;">
+			</div>
+		</form>
+
+	</blockquote>
+	<fieldset class="layui-elem-field">
+		<legend>用户列表</legend>
+		<div class="layui-field-box layui-form">
+			<table class="layui-table admin-table">
+				<thead>
+				<tr>
+					<th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+					<th>用户编号</th>
+					<th>用户名</th>
+					<th>性别</th>
+					<th>邮箱</th>
+					<th>注册时间</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				<tbody id="content">
+				{volist name="lists" id="vo"}
+				<tr>
+					<td><input type="checkbox" lay-skin="primary"></td>
+					<td>{$vo.uid}</td>
+					<td>{$vo.uname}</td>
+					<td>{$vo.sex}</td>
+					<td>{$vo.email}</td>
+					<td>{$vo.regdate}</td>
+					<td>
+						<a href="javascript:;" data-name="{$vo.uname}" data-id="{$vo.id}" data-opt="edit" class="layui-btn layui-btn-mini">编辑</a>
+						<a href="javascript:;" data-name="{$vo.uname}" data-id="{$vo.id}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+					</td>
+				</tr>
+				{/volist}
+				</tbody>
+			</table>
+		</div>
+	</fieldset>
+	<div class="admin-table-page">
+		<div id="paged" class="pagelist">
+			{$lists->render()}
+		</div>
+	</div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery-1.11.3/jquery.js"></script>
+<script src="/static/js/operate/useroperate.js"></script>
+
+</body>
+</html>

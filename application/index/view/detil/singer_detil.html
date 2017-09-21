@@ -1,0 +1,63 @@
+{extend name="base" /}
+{block name="css"}
+
+{/block}
+
+{block name="title"}{$gsname}{/block}
+
+{block name="tab"}
+
+{/block}
+
+{block name="container"}
+<div class="mdui-container">
+    <div class="mdui-row">
+        <div class="mdui-col-xs-8 mdui-col-offset-xs-2">
+            <img style="width: 100%;" src="{$imgurl}"/>
+            <div class="mdui-tab mdui-tab-full-width" mdui-tab>
+                <a href="#songs" class="mdui-ripple">热门单曲</a>
+                <a href="#albums" class="mdui-ripple">专辑</a>
+                <a href="#summary" class="mdui-ripple">歌手简介</a>
+            </div>
+            <div id="songs" class="mdui-p-a-2">
+                <div class="mdui-table-fluid">
+                    <table class="mdui-table mdui-table-hoverable">
+                        <thead>
+                        <tbody>
+                        {volist name="songs" id="gq"}
+                        <tr>
+                            <td>{$i}</td>
+                            <td><a href="{:url('index/detil/songdetil',['gqid'=>$gq.gqid])}">{$gq.gqname}</a></td>
+                            <td><a href="{:url('index/detil/albumdetil',['zjid'=>$gq.zjid])}">{$gq.zjname}</a></td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="albums" class="mdui-p-a-2">
+                {volist name="albums" id="zj"}
+                <div class="mdui-col-xs-4" style="margin:20px 0">
+                    <div class="mdui-col">
+                        <div class="mdui-grid-tile">
+                            <a href="{:url('index/detil/albumdetil',['zjid'=>$zj.zjid])}"><img src="{$zj.imgurl}"/></a>
+                            <div class="mdui-grid-tile-actions">
+                                <div class="mdui-grid-tile-text">
+                                    <div class="mdui-grid-tile-title">{$zj.zjname}</div>
+                                    <div class="mdui-grid-tile-subheading">{$zj.createtime}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/volist}
+            </div>
+            <div id="summary" class="mdui-p-a-2 mdui-typo">{$summary}</div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+
+{/block}

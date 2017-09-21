@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style type="text/css">
+        img:hover{ transform:scale(5); z-index: 092113114;}
+    </style>
+</head>
+<body>
+<div style="margin: 15px;">
+    <div class="layui-form">
+        {volist name="list" id="vo" length='1'}
+        <input type="hidden" id="albumid" value="{$vo.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">专辑名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="zjname" value="{$vo.zjname}" required lay-verify="required" placeholder="请输入专辑名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">专辑介绍</label>
+            <div class="layui-input-block">
+                <textarea class="layui-textarea" id="summary" style="display: none">{$vo.summary}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">发行时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="createtime" value="{$vo.createtime}" id="date" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专辑封面</label>
+            <div class="layui-input-inline">
+                <input type="file" name="image" class="layui-upload-file"/>
+                <input type="hidden" name="imgurl" value="{$vo.imgurl}" id="imgurl">
+                <img id="img" name="img" src="{$vo.imgurl}" height="40px">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">歌手</label>
+            <div class="layui-input-inline">
+                <input type="text" name="gsname" value="{$vo.gsname}" required lay-verify="required" placeholder="请输入歌手名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        {/volist}
+        <br>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="save" id="save">提交修改</button>
+                <button class="layui-btn layui-btn-primary" id="cancel">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery-1.11.3/jquery.js"></script>
+
+<script>
+    layui.use(['form','upload','layer','laydate','layedit'],function () {
+        var form = layui.form(),
+            layer = layui.layer,
+            laydate = layui.date,
+            layedit = layui.layedit,
+            index = parent.layer.getFrameIndex(window.name);
+
+        layui.upload({
+            url: $("#albumid").val(),
+            success: function (res) {
+                console.log(res);
+                $("#img").attr({src:res.url,width:"60",heigth:"60"});
+                $("#imgurl").val(res.url);
+            }
+        });
+
+        var summary =  layedit.build('summary', {
+            tool: ['left', 'center', 'right', 'strong']
+            ,height: 100
+        })
+
+        form.on('submit(save)',function (data) {
+            var datas = data.field
+            console.log(datas);
+            $.ajax({
+                type: 'post',
+                url: datas.id,
+                data: {'zjname':datas.zjname,'gsname':datas.gsname,'summary':layedit.getContent(summary),'createtime':datas.createtime,'imgurl':datas.imgurl},
+                dataType: 'json',
+                success: function (result) {
+                    if(result.status == 1){
+                        layer.alert('修改成功',function () {
+                            parent.layer.close(index);
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg('修改失败');
+                    }
+                }
+            });
+        });
+
+        $("#cancel").click(function () {
+            parent.layer.close(index);
+            parent.location.reload();
+        });
+    });
+</script>
+</body>
+</html>

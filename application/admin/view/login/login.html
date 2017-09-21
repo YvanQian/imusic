@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>后台登录</title>
+    <meta name="description" content="particles.js is a lightweight JavaScript library for creating particles.">
+    <meta name="author" content="Vincent Garreau" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" media="screen" href="/static/particles/css/style.css">
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+</head>
+<body>
+
+<!-- count particles -->
+<!--<div class="count-particles">-->
+    <!--<span class="js-count-particles">&#45;&#45;</span> particles-->
+<!--</div>-->
+
+<!-- particles.js container -->
+<div id="particles-js"></div>
+
+<!-- scripts -->
+<script src="/static/particles/particles.min.js"></script>
+<script src="/static/particles/js/app.js"></script>
+
+<!-- stats.js -->
+<!--<script src="/static/particles/js/lib/stats.js"></script>-->
+<script>
+    var count_particles, stats, update;
+    stats = new Stats;
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild(stats.domElement);
+    count_particles = document.querySelector('.js-count-particles');
+    update = function() {
+        stats.begin();
+        stats.end();
+        if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
+            count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
+        }
+        requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+</script>
+
+<div style="position: absolute;left: 50%;transform: translate(-50%,-50%);top: 40%;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;color: #ddd;">
+        <legend>管理员后台登录</legend>
+    </fieldset>
+    <div class="layui-form layui-form-pane">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" id="name" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="password" id="password" lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">验证码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="captcha" id="captcha" lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <img src="{:captcha_src()}" id="captcha_img" alt="captcha" onclick="this.src='{:captcha_src()}'" style="height: 40px;">
+        </div>
+        <div class="layui-from-item">
+            <button id="submit" name="submit" class="layui-btn layui-btn-normal" style="width: 300px;">登录</button>
+            <!--<input type="submit" name="submit" class="layui-btn layui-btn-normal" value="登录" style="width: 300px;">-->
+        </div>
+    </div>
+</div>
+<script src="/static/jquery-1.11.3/jquery.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script>
+    layui.use('layer',function () {
+        var layer = layui.layer;
+
+        $("#submit").click(function () {
+            if($("#name").val() == ''){
+                layer.tips('请输入用户名','#name');
+                $("#name").select();
+                return;
+            }
+            if($("#password").val() == ''){
+                layer.tips('请输入密码','#password');
+                $("#password").select();
+                return;
+            }
+            if($("#captcha").val() == ''){
+                layer.tips('请输入验证码','#captcha');
+                $("#captcha").select();
+                return;
+            }
+            $.ajax({
+                type:"post",
+                url:'admincheck',
+                data:{'name':$("#name").val(),'password':$("#password").val(),'captcha':$("#captcha").val()},
+                datatype:'json',
+                success:function (datas) {
+                    if(datas.status == 0){
+                        layer.msg(datas.msg,function () {});
+                        $("#captcha_img").attr("src","{:captcha_src()}");
+                        return;
+                    }else if(datas.status == 1){
+                        layer.msg(datas.msg);
+                        var t=setTimeout("location.href = '/admin'",1000);
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

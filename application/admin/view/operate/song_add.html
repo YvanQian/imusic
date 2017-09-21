@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style type="text/css">
+        img:hover{ transform:scale(5); z-index: 092113114;}
+    </style>
+</head>
+<body>
+<div style="margin: 15px;">
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">歌曲名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="gqname" required lay-verify="required" placeholder="请输入歌曲名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">所属专辑</label>
+            <div class="layui-input-block">
+                <input type="text" name="zjname" placeholder="请输入专辑名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">歌手</label>
+            <div class="layui-input-inline">
+                <input type="text" name="gsname" placeholder="请输入歌手" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类</label>
+            <div class="layui-input-inline">
+                <select name="classname" required lay-verify="required" lay-search>
+                    <option value="">直接选择或搜索选择</option>
+                    {volist name='list' id='vo'}
+                    <option value="{$vo.classname}">{$vo.classname}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上传歌曲</label>
+            <div class="layui-input-inline">
+                <input type="file" name="audio" lay-type="audio" id="upsong" class="layui-upload-file"/>
+                <input type="hidden" name="gqurl" id="gqurl"><br><br>
+                <audio src="" id="audio" controls="controls"></audio>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">MV</label>
+            <div class="layui-input-inline">
+                <input type="file" name="vedio" lay-type="video" id="upmv" class="layui-upload-file"/>
+                <input type="hidden" name="mvurl" id="mvurl">
+            </div>
+        </div>
+        <br>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="save" id="save">保存</button>
+                <button class="layui-btn layui-btn-primary" id="cancel">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery-1.11.3/jquery.js"></script>
+
+<script>
+    layui.use(['form','upload','layer'],function () {
+        var form = layui.form(),
+            layer = layui.layer,
+            index = parent.layer.getFrameIndex(window.name);
+
+        layui.upload({
+            elem: '#upsong',
+            url: 'upsong',
+            before: function(input){
+                loading = layer.load(0, { shade: false});
+            },
+            success: function (res) {
+                layer.close(loading);
+                layer.msg('上传成功');
+                console.log(res);
+                $("#audio").attr({src:res.url});
+                $("#gqurl").val(res.url);
+            }
+        });
+
+        layui.upload({
+            elem: '#upmv',
+            url: 'upmv',
+            before: function(input){
+                loading = layer.load(0, { shade: false});
+            },
+            success: function (res) {
+                layer.close(loading);
+                layer.msg('上传成功');
+                console.log(res);
+                $("#mvurl").val(res.url);
+            }
+        });
+
+        form.on('submit(save)',function (data) {
+            var datas = data.field
+            console.log(datas);
+            $.ajax({
+                type: 'post',
+                url: 'addsong',
+                data: {'gqname':datas.gqname,'zjname':datas.zjname,'gsname':datas.gsname,'classname':datas.classname,'gqurl':datas.gqurl,'mvurl':datas.mvurl},
+                dataType: 'json',
+                success: function (result) {
+//                    if(result.status == 0 ){
+//                        layer.msg('专辑已存在',function(){})
+//                    }else
+                    if(result.status == 1){
+                        layer.alert('添加成功',{
+                            btn:['继续添加','返回']
+                        },function () {
+                            location.reload()
+                        },function () {
+                            parent.layer.close(index);
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg('添加失败');
+                    }
+                }
+            });
+        });
+
+        $("#cancel").click(function () {
+            parent.layer.close(index);
+            parent.location.reload();
+        });
+    });
+</script>
+</body>
+</html>

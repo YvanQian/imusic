@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<body>
+<div style="margin: 15px;">
+	<div class="layui-form">
+		<div class="layui-form-item">
+            {volist name="list" id="vo" length='1'}
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-inline">
+				<input type="hidden" name="id" value="{$vo.id}">
+				<input type="text" name="name" value="{$vo.uname}" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密码</label>
+			<div class="layui-input-inline">
+				<input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">性别</label>
+			<div class="layui-input-block">
+                {eq name="$vo.sex" value="男"}
+                <input type="radio" name="sex" value="男" title="男" checked>
+				<input type="radio" name="sex" value="女" title="女">
+                {else/}
+                <input type="radio" name="sex" value="男" title="男">
+				<input type="radio" name="sex" value="女" title="女" checked>
+                {/eq}
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮箱</label>
+			<div class="layui-input-inline">
+				<input type="text" name="email" value="{$vo.email}" required lay-verify="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+            {/volist}
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="save" id="save">保存</button>
+				<button class="layui-btn layui-btn-primary" id="cancel">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+<script src="/static/jquery-1.11.3/jquery.js"></script>
+
+<script>
+	layui.use(['form','layer'],function () {
+		var form = layui.form(),
+			layer = layui.layer,
+            index = parent.layer.getFrameIndex(window.name);
+
+		form.on('submit(save)',function (data) {
+		   	var datas = data.field
+			   console.log(datas)
+            $.ajax({
+                type: 'post',
+                url: datas.id,
+                data: {'name':datas.name,'password':datas.password,'sex':datas.sex,'email':datas.email},
+                dataType: 'json',
+                success: function (result) {
+                    if(result.status == 1){
+                        layer.alert('修改成功',function(){
+							parent.layer.close(index);
+							parent.location.reload();
+						});
+                    }else{
+                        layer.msg('修改失败');
+                    }
+                }
+            });
+        });
+//			layer.alert(datas.name,{
+//			    title:'最终提交信息'
+//			})
+//			return false;
+
+        $("#cancel").click(function () {
+            parent.layer.close(index);
+        });
+    });
+</script>
+</body>
+</html>
