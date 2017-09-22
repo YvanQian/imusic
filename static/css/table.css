@@ -1,0 +1,29 @@
+/*table*/
+.site-table tbody tr td {text-align: center;}
+.site-table tbody tr td .layui-btn+.layui-btn{margin-left: 0px;}
+.admin-table-page {position: fixed;z-index: 19940201;bottom: 0;width: 100%;background-color: #eee;border-bottom: 1px solid #ddd;left: 0px;}
+.admin-table-page .page{padding-left:20px;}
+.admin-table-page .page .layui-laypage {margin: 6px 0 0 0;}
+.table-hover tbody tr:hover{ background-color: #EEEEEE; }
+
+.admin-table .layui-form-checkbox{
+	margin-top: 0;
+	height: 20px;
+	line-height: 20px;
+}
+
+/*.pagelist {padding:10px 0; text-align:center;}*/
+/*.pagelist span,.pagelist a{ border-radius:3px; border:1px solid #dfdfdf;display:inline-block; padding:5px 12px;}*/
+/*.pagelist a{ margin:0 3px;}*/
+/*.pagelist span.current{ background:#09F; color:#FFF; border-color:#09F; margin:0 2px;}*/
+/*.pagelist a:hover{background:#09F; color:#FFF; border-color:#09F; }*/
+/*.pagelist label{ padding-left:15px; color:#999;}*/
+/*.pagelist label b{color:red; font-weight:normal; margin:0 3px;}*/
+.pagination {padding: 10px 0; text-align: center;}
+.pagination li {display: inline-block;margin-right: -1px;padding: 5px;border: 1px solid #e2e2e2;min-width: 20px;text-align: center;}
+.pagination li.active {background: #009688;color: #fff;border: 1px solid #009688;}
+.pagination li a {display: block;text-align: center;}
+
+#content img:hover{
+	transform:scale(5);
+}
